@@ -22,7 +22,7 @@ jobs:
         run: npm ci
 
       - name: Build Backend
-        run: npm run build
+        run: npm start
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1
