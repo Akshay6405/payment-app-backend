@@ -1,36 +1,36 @@
 name: CI/CD Pipeline
 
 on:
-	push:
-		branches: [main]
+  push:
+    branches: [main]
 
 jobs:
-	build-and-deploy:
-		runs-on: ubuntu-latest
+  build-and-deploy:
+    runs-on: ubuntu-latest
 
-		steps:
-			- name: Checkout code
-				uses: actions/checkout@v3
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-			- name: Set up Node.js
-				uses: actions/setup-node@v3
-				with:
-					node-version: '18'
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
 
-			- name: Install dependencies
-				run: npm install
+      - name: Install dependencies
+        run: npm install
 
-			- name: Run tests
-				run: npm test
+      - name: Run tests
+        run: npm test
 
-			- name: Deploy to EC2
-				uses: appleboy/ssh-action@v0.1.10
-				with:
-					host: ${{ secrets.EC2_HOST }}
-					username: ubuntu
-					key: ${{ secrets.EC2_SSH_KEY }}
-					script: |
-						cd ~/payment-app-backend
-						git pull origin main
-						npm install
-						pm2 restart payment-backend || pm2 start index.js --name payment-backend
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/payment-app-backend
+            git pull origin main
+            npm install
+            pm2 restart payment-backend || pm2 start index.js --name payment-backend
